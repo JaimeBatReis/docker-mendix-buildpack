@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  selenium-chrome:
+    image: selenium/standalone-chrome:latest
+    hostname: chrome
+    environment:
+     - SE_NODE_MAX_SESSIONS =3
+     - SE_NODE_OVERRIDE_MAX_SESSIONS =true
+    ports:
+      - 4444:4444
+
+  mendix:
+    build: 
+      context: .
+      args:
+        BUILD_PATH: "/mercedespoc"
+    environment:
+     - ADMIN_PASSWORD=Deloitte@123 
+     - DATABASE_ENDPOINT=postgres://mendix:mendix@host.docker.internal:5432/mendix 
+    ports:
+      - 8080:8080
+    depends_on:
+      - selenium-chrome
